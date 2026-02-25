@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TribalRoots | Authentic Tribal Crafts</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Inter', sans-serif; }
+        .font-serif { font-family: 'Playfair Display', serif; }
+        .page-section { display: none; }
+        .page-section.active { display: block; }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #fdfaf5; }
+        ::-webkit-scrollbar-thumb { background: #c2410c; border-radius: 10px; }
+        
+        .toast-animate {
+            animation: slideUp 0.3s ease-out forwards;
+        }
+        @keyframes slideUp {
+            from { transform: translate(-50%, 50px); opacity: 0; }
+            to { transform: translate(-50%, 0); opacity: 1; }
+        }
+    </style>
+</head>
+<body class="bg-[#fdfaf5] text-stone-900">
+
+    <!-- Navigation -->
+    <nav class="sticky top-0 z-50 bg-[#fdfaf5]/90 backdrop-blur-md border-b border-stone-200 shadow-sm">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-20 items-center">
+                <div class="flex items-center cursor-pointer" onclick="navigateTo('home')">
+                    <div class="bg-orange-800 p-2 rounded-lg mr-2">
+                        <i data-lucide="hammer" class="text-white h-6 w-6"></i>
+                    </div>
+                    <span class="text-2xl font-bold text-stone-900 tracking-tight font-serif">TribalRoots</span>
+                </div>
+
+                <div class="hidden md:flex space-x-8 font-medium">
+                    <button onclick="navigateTo('home')" class="hover:text-orange-800 transition">Home</button>
+                    <button onclick="navigateTo('products')" class="hover:text-orange-800 transition">Shop</button>
+                    <button onclick="navigateTo('contact')" class="hover:text-orange-800 transition">Contact</button>
+                </div>
+
+                <div class="flex items-center space-x-5">
+                    <div id="user-controls" class="flex items-center space-x-4">
+                        <button onclick="navigateTo('login')" class="p-2 text-stone-700 hover:bg-stone-100 rounded-full">
+                            <i data-lucide="user" class="h-6 w-6"></i>
+                        </button>
+                    </div>
+                    
+                    <button onclick="navigateTo('cart')" class="relative p-2 text-stone-700 hover:bg-stone-100 rounded-full">
+                        <i data-lucide="shopping-bag" class="h-6 w-6"></i>
+                        <span id="cart-badge" class="hidden absolute top-0 right-0 bg-orange-800 text-white text-[10px] rounded-full h-5 w-5 flex items-center justify-center font-bold">0</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- MAIN CONTENT CONTAINERS -->
+    <main id="main-content">
+        
+        <!-- HOME PAGE -->
+        <section id="page-home" class="page-section active">
+            <div class="relative h-[80vh] flex items-center overflow-hidden">
+                <div class="absolute inset-0 -z-10">
+                    <img src="https://images.unsplash.com/photo-1544027993-37dbfe43562a?auto=format&fit=crop&q=80&w=1600" class="w-full h-full object-cover brightness-[0.4]" alt="Hero">
+                </div>
+                <div class="max-w-7xl mx-auto px-4 text-white">
+                    <span class="text-orange-400 font-bold tracking-widest uppercase mb-4 block">Handcrafted Tradition</span>
+                    <h1 class="text-5xl md:text-7xl font-serif font-bold mb-6 leading-tight">Wear the Soul <br> Of the Earth</h1>
+                    <p class="text-lg md:text-xl text-stone-300 max-w-2xl mb-10 leading-relaxed">Discover exquisite treasures crafted by the tribal hearts of India.</p>
+                    <button onclick="navigateTo('products')" class="bg-orange-800 hover:bg-orange-700 text-white px-8 py-4 rounded-full font-bold transition flex items-center group">
+                        Shop Collection <i data-lucide="arrow-right" class="ml-2 h-5 w-5 group-hover:translate-x-1 transition"></i>
+                    </button>
+                </div>
+            </div>
+
+            <section class="py-24 max-w-7xl mx-auto px-4">
+                <div class="text-center mb-16">
+                    <h2 class="text-3xl font-serif font-bold text-stone-900 mb-4">Explore Our Heritage</h2>
+                    <div class="h-1 w-20 bg-orange-800 mx-auto"></div>
+                </div>
+                <div id="category-grid" class="grid grid-cols-2 lg:grid-cols-5 gap-6">
+                    <!-- Categories injected by JS -->
+                </div>
+            </section>
+        </section>
+
+        <!-- PRODUCTS PAGE -->
+        <section id="page-products" class="page-section py-12 max-w-7xl mx-auto px-4">
+            <div class="flex flex-col md:flex-row md:items-center justify-between gap-6 mb-12">
+                <div>
+                    <h1 class="text-4xl font-serif font-bold text-stone-900">The Collection</h1>
+                    <p id="product-count" class="text-stone-500 mt-2">Showing all artifacts</p>
+                </div>
+                <div class="flex flex-col sm:flex-row gap-4">
+                    <div class="relative">
+                        <i data-lucide="search" class="absolute left-3 top-1/2 -translate-y-1/2 text-stone-400 h-5 w-5"></i>
+                        <input type="text" id="search-input" placeholder="Search artifacts..." class="pl-10 pr-4 py-2 bg-stone-100 border-none rounded-full focus:ring-2 ring-orange-800/20 w-full md:w-64">
+                    </div>
+                    <select id="category-filter" class="px-4 py-2 bg-stone-100 border-none rounded-full text-stone-700">
+                        <option value="all">All Categories</option>
+                    </select>
+                </div>
+            </div>
+            <div id="product-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-x-8 gap-y-12">
+                <!-- Products injected by JS -->
+            </div>
+        </section>
+
+        <!-- CART PAGE -->
+        <section id="page-cart" class="page-section py-16 max-w-7xl mx-auto px-4">
+            <h1 class="text-3xl font-serif font-bold mb-12">Your Shopping Bag</h1>
+            <div id="cart-content" class="grid grid-cols-1 lg:grid-cols-3 gap-12">
+                <!-- Cart items and summary injected by JS -->
+            </div>
+        </section>
+
+        <!-- CONTACT PAGE -->
+        <section id="page-contact" class="page-section py-20 max-w-4xl mx-auto px-4">
+            <div class="text-center mb-16">
+                <h1 class="text-4xl font-serif font-bold text-stone-900 mb-4">Get in Touch</h1>
+            </div>
+            <div class="grid md:grid-cols-2 gap-12">
+                <div class="space-y-8">
+                    <div class="flex items-start space-x-4">
+                        <div class="bg-orange-100 p-3 rounded-full text-orange-800"><i data-lucide="map-pin"></i></div>
+                        <div><h4 class="font-bold">Headquarters</h4><p class="text-stone-500 text-sm text-wrap">Tribal Heritage Hub, Raipur, India</p></div>
+                    </div>
+                    <div class="flex items-start space-x-4">
+                        <div class="bg-orange-100 p-3 rounded-full text-orange-800"><i data-lucide="phone"></i></div>
+                        <div><h4 class="font-bold">Phone</h4><p class="text-stone-500 text-sm">+91 98765-43210</p></div>
+                    </div>
+                </div>
+                <form onsubmit="handleContact(event)" class="bg-white p-8 rounded-3xl border border-stone-200 shadow-sm space-y-4">
+                    <input type="text" placeholder="Name" class="w-full px-4 py-3 rounded-xl bg-stone-50 border-none" required>
+                    <input type="email" placeholder="Email" class="w-full px-4 py-3 rounded-xl bg-stone-50 border-none" required>
+                    <textarea placeholder="Message" rows="4" class="w-full px-4 py-3 rounded-xl bg-stone-50 border-none" required></textarea>
+                    <button class="w-full bg-orange-800 text-white py-3 rounded-xl font-bold">Send Message</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- LOGIN PAGE -->
+        <section id="page-login" class="page-section py-24 max-w-md mx-auto px-4">
+            <div class="bg-white p-10 rounded-3xl border border-stone-200 shadow-xl">
+                <h2 id="login-title" class="text-3xl font-serif font-bold text-center mb-8">Welcome Back</h2>
+                <form onsubmit="handleLogin(event)" class="space-y-4">
+                    <input type="email" placeholder="Email Address" class="w-full px-4 py-3 rounded-xl bg-stone-50 border border-stone-100" required>
+                    <input type="password" placeholder="Password" class="w-full px-4 py-3 rounded-xl bg-stone-50 border border-stone-100" required>
+                    <button class="w-full bg-orange-800 text-white py-4 rounded-xl font-bold text-lg mt-4 shadow-lg shadow-orange-800/10">Log In</button>
+                </form>
+            </div>
+        </section>
+
+        <!-- CHECKOUT PAGE -->
+        <section id="page-checkout" class="page-section py-20 max-w-4xl mx-auto px-4">
+            <h1 class="text-3xl font-serif font-bold mb-12">Checkout</h1>
+            <div id="checkout-container" class="grid md:grid-cols-2 gap-12">
+                <!-- Injected by JS -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-stone-900 text-stone-300 pt-16 pb-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 grid grid-cols-1 md:grid-cols-4 gap-12">
+            <div>
+                <h3 class="text-white text-xl font-bold font-serif mb-6">TribalRoots</h3>
+                <p class="text-stone-400 leading-relaxed text-sm">Empowering indigenous artisans by bringing their timeless craftsmanship to the global stage.</p>
+            </div>
+            <div>
+                <h4 class="text-white font-semibold mb-6">Quick Links</h4>
+                <ul class="space-y-3 text-sm">
+                    <li><button onclick="navigateTo('products')" class="hover:text-orange-400">Shop All</button></li>
+                    <li><button onclick="navigateTo('contact')" class="hover:text-orange-400">Support</button></li>
+                </ul>
+            </div>
+        </div>
+        <div class="mt-16 pt-8 border-t border-stone-800 text-center text-xs text-stone-500">
+            &copy; 2024 TribalRoots. All rights reserved.
+        </div>
+    </footer>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="hidden fixed bottom-10 left-1/2 -translate-x-1/2 z-[100] bg-stone-900 text-white px-6 py-3 rounded-full shadow-2xl flex items-center space-x-3 toast-animate">
+        <i data-lucide="heart" class="h-4 w-4 text-orange-500 fill-current"></i>
+        <span id="toast-msg" class="font-medium"></span>
+    </div>
+
+    <!-- SCRIPT LOGIC -->
+    <script>
+        // --- DATA ---
+        const CATEGORIES = [
+            { id: 'dokra', name: 'Dokra Art', icon: 'hammer', desc: 'Lost wax metal casting' },
+            { id: 'textiles', name: 'Textiles', icon: 'shirt', desc: 'Hand-woven Silk & Wool' },
+            { id: 'jewelry', name: 'Jewelry', icon: 'gem', desc: 'Bone, Beads & Shells' },
+            { id: 'carpentry', name: 'Carpentry', icon: 'map-pin', desc: 'Bamboo & Cane' },
+            { id: 'paintings', name: 'Paintings', icon: 'palette', desc: 'Cultural Heritage' },
+        ];
+
+        const PRODUCTS = [
+            { id: 1, name: "Dokra Horse Sculpture", price: 120, category: "dokra", tribe: "Gadwa", img: "https://images.unsplash.com/photo-1590736962236-4091a1005175?auto=format&fit=crop&q=80&w=400", rating: 4.8 },
+            { id: 2, name: "Muga Silk Shawl", price: 250, category: "textiles", tribe: "Northeast", img: "https://images.unsplash.com/photo-1606760227091-3dd870d97f1d?auto=format&fit=crop&q=80&w=400", rating: 4.9 },
+            { id: 3, name: "Naga Bead Necklace", price: 45, category: "jewelry", tribe: "Angami", img: "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?auto=format&fit=crop&q=80&w=400", rating: 4.7 },
+            { id: 4, name: "Bamboo Craft Chair", price: 180, category: "carpentry", tribe: "Tripura", img: "https://images.unsplash.com/photo-1594026112284-02bb6f3352fe?auto=format&fit=crop&q=80&w=400", rating: 4.5 },
+            { id: 5, name: "Gond Style Painting", price: 95, category: "paintings", tribe: "Gond", img: "https://images.unsplash.com/photo-1579783902614-a3fb3927b6a5?auto=format&fit=crop&q=80&w=400", rating: 4.8 },
+            { id: 6, name: "Dokra Bell Metal Lamp", price: 150, category: "dokra", tribe: "Dhurwa", img: "https://images.unsplash.com/photo-1534073828943-f801091bb18c?auto=format&fit=crop&q=80&w=400", rating: 4.6 },
+            { id: 7, name: "Tassar Silk Saree", price: 320, category: "textiles", tribe: "Jharkhand", img: "https://images.unsplash.com/photo-1610030469983-98e550d6193c?auto=format&fit=crop&q=80&w=400", rating: 5.0 },
+            { id: 8, name: "Shell & Coral Bangles", price: 65, category: "jewelry", tribe: "Odisha", img: "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?auto=format&fit=crop&q=80&w=400", rating: 4.4 },
+        ];
+
+        // --- STATE ---
+        let cart = [];
+        let user = null;
+        let activeCategory = 'all';
+        let searchQuery = '';
+
+        // --- CORE FUNCTIONS ---
+        function navigateTo(pageId) {
+            document.querySelectorAll('.page-section').forEach(p => p.classList.remove('active'));
+            document.getElementById(`page-${pageId}`).classList.add('active');
+            window.scrollTo(0, 0);
+            renderPage(pageId);
+        }
+
+        function renderPage(pageId) {
+            if (pageId === 'home') renderHome();
+            if (pageId === 'products') renderProducts();
+            if (pageId === 'cart') renderCart();
+            if (pageId === 'checkout') renderCheckout();
+            lucide.createIcons();
+        }
+
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toast-msg').innerText = msg;
+            toast.classList.remove('hidden');
+            setTimeout(() => toast.classList.add('hidden'), 3000);
+        }
+
+        // --- PAGE RENDERING ---
+        function renderHome() {
+            const grid = document.getElementById('category-grid');
+            grid.innerHTML = CATEGORIES.map(cat => `
+                <div onclick="setCategory('${cat.id}')" class="group cursor-pointer bg-white p-8 rounded-2xl border border-stone-200 text-center hover:shadow-xl hover:-translate-y-2 transition-all duration-300">
+                    <div class="bg-stone-50 w-16 h-16 rounded-full flex items-center justify-center mx-auto mb-6 group-hover:bg-orange-100 transition">
+                        <i data-lucide="${cat.icon}" class="h-8 w-8 text-stone-700 group-hover:text-orange-800"></i>
+                    </div>
+                    <h3 class="font-bold text-stone-800 mb-2">${cat.name}</h3>
+                    <p class="text-[10px] text-stone-500 uppercase tracking-widest">${cat.desc}</p>
+                </div>
+            `).join('');
+        }
+
+        function renderProducts() {
+            const filtered = PRODUCTS.filter(p => {
+                const matchCat = activeCategory === 'all' || p.category === activeCategory;
+                const matchSearch = p.name.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchCat && matchSearch;
+            });
+
+            document.getElementById('product-count').innerText = `Showing ${filtered.length} authentic artifacts`;
+            const grid = document.getElementById('product-grid');
+            
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-full py-20 text-center text-stone-400">No products found.</div>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(p => `
+                <div class="group">
+                    <div class="aspect-square overflow-hidden rounded-2xl bg-stone-100 relative">
+                        <img src="${p.img}" alt="${p.name}" class="h-full w-full object-cover transition duration-500 group-hover:scale-110">
+                        <div class="absolute top-4 left-4 bg-white/90 backdrop-blur px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-widest text-orange-900">
+                            ${p.tribe} Tribe
+                        </div>
+                        <button onclick="addToCart(${p.id})" class="absolute bottom-4 right-4 bg-orange-800 text-white p-3 rounded-full shadow-lg translate-y-12 opacity-0 group-hover:translate-y-0 group-hover:opacity-100 transition-all duration-300">
+                            <i data-lucide="shopping-bag" class="h-5 w-5"></i>
+                        </button>
+                    </div>
+                    <div class="mt-4">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="text-stone-900 font-bold">${p.name}</h3>
+                                <p class="text-stone-500 text-sm capitalize">${p.category}</p>
+                            </div>
+                            <p class="text-orange-900 font-bold">$${p.price}</p>
+                        </div>
+                    </div>
+                </div>
+            `).join('');
+            lucide.createIcons();
+        }
+
+        function renderCart() {
+            const container = document.getElementById('cart-content');
+            if (cart.length === 0) {
+                container.innerHTML = `
+                    <div class="col-span-full text-center py-20 bg-stone-50 rounded-3xl border border-dashed border-stone-200">
+                        <i data-lucide="shopping-bag" class="h-16 w-16 text-stone-200 mx-auto mb-6"></i>
+                        <p class="text-stone-500 mb-8">Your bag is currently empty</p>
+                        <button onclick="navigateTo('products')" class="bg-orange-800 text-white px-8 py-3 rounded-full">Start Shopping</button>
+                    </div>
+                `;
+            } else {
+                const total = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+                container.innerHTML = `
+                    <div class="lg:col-span-2 space-y-6">
+                        ${cart.map(item => `
+                            <div class="flex gap-6 p-6 bg-white border border-stone-100 rounded-2xl">
+                                <img src="${item.img}" class="w-24 h-24 object-cover rounded-xl" alt="${item.name}">
+                                <div class="flex-1">
+                                    <div class="flex justify-between">
+                                        <h3 class="font-bold text-lg">${item.name}</h3>
+                                        <p class="font-bold text-orange-900">$${item.price * item.qty}</p>
+                                    </div>
+                                    <div class="flex items-center justify-between mt-4">
+                                        <div class="flex items-center space-x-3 bg-stone-100 rounded-full px-3 py-1">
+                                            <button onclick="updateQty(${item.id}, -1)">-</button>
+                                            <span class="w-8 text-center text-sm font-bold">${item.qty}</span>
+                                            <button onclick="updateQty(${item.id}, 1)">+</button>
+                                        </div>
+                                        <button onclick="removeFromCart(${item.id})" class="text-red-500 p-2 hover:bg-red-50 rounded-full">
+                                            <i data-lucide="trash-2" class="h-5 w-5"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        `).join('')}
+                    </div>
+                    <div class="bg-stone-50 p-8 rounded-3xl h-fit border border-stone-200">
+                        <h2 class="text-xl font-bold mb-6">Order Summary</h2>
+                        <div class="space-y-4 text-stone-600 mb-8">
+                            <div class="flex justify-between"><span>Subtotal</span><span>$${total}</span></div>
+                            <div class="pt-4 border-t border-stone-200 flex justify-between font-bold text-stone-900 text-lg">
+                                <span>Total</span><span>$${total}</span>
+                            </div>
+                        </div>
+                        <button onclick="navigateTo('checkout')" class="w-full bg-orange-800 text-white py-4 rounded-full font-bold shadow-lg">Proceed to Checkout</button>
+                    </div>
+                `;
+            }
+            lucide.createIcons();
+        }
+
+        function renderCheckout() {
+            const total = cart.reduce((acc, item) => acc + (item.price * item.qty), 0);
+            const container = document.getElementById('checkout-container');
+            container.innerHTML = `
+                <div class="space-y-8">
+                    <h2 class="text-xl font-bold">Shipping Details</h2>
+                    <div class="space-y-4">
+                        <input type="text" placeholder="Full Name" class="w-full p-3 bg-stone-100 border-none rounded-lg">
+                        <input type="text" placeholder="Shipping Address" class="w-full p-3 bg-stone-100 border-none rounded-lg">
+                    </div>
+                    <h2 class="text-xl font-bold pt-8">Payment Info</h2>
+                    <input type="text" placeholder="Card Number" class="w-full p-3 bg-stone-100 border-none rounded-lg">
+                </div>
+                <div class="bg-stone-50 p-8 rounded-3xl border border-stone-200">
+                    <h3 class="text-lg font-bold mb-4">Total Due: $${total}</h3>
+                    <button onclick="completeOrder()" class="w-full bg-orange-800 text-white py-4 rounded-full font-bold">Pay Now</button>
+                </div>
+            `;
+        }
+
+        // --- EVENT HANDLERS ---
+        function addToCart(id) {
+            const product = PRODUCTS.find(p => p.id === id);
+            const existing = cart.find(item => item.id === id);
+            if (existing) {
+                existing.qty++;
+            } else {
+                cart.push({ ...product, qty: 1 });
+            }
+            updateCartBadge();
+            showToast(`Added ${product.name} to bag!`);
+        }
+
+        function updateCartBadge() {
+            const count = cart.reduce((a, b) => a + b.qty, 0);
+            const badge = document.getElementById('cart-badge');
+            if (count > 0) {
+                badge.innerText = count;
+                badge.classList.remove('hidden');
+            } else {
+                badge.classList.add('hidden');
+            }
+        }
+
+        function updateQty(id, delta) {
+            const item = cart.find(i => i.id === id);
+            if (item) {
+                item.qty = Math.max(1, item.qty + delta);
+                renderCart();
+                updateCartBadge();
+            }
+        }
+
+        function removeFromCart(id) {
+            cart = cart.filter(i => i.id !== id);
+            renderCart();
+            updateCartBadge();
+        }
+
+        function setCategory(id) {
+            activeCategory = id;
+            document.getElementById('category-filter').value = id;
+            navigateTo('products');
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            user = { name: "Artisan Supporter" };
+            document.getElementById('user-controls').innerHTML = `
+                <span class="text-sm font-medium text-stone-600">Hello, Artisan!</span>
+                <button onclick="logout()" class="text-red-600 text-sm">Logout</button>
+            `;
+            showToast("Welcome back!");
+            navigateTo('home');
+        }
+
+        function logout() {
+            user = null;
+            document.getElementById('user-controls').innerHTML = `
+                <button onclick="navigateTo('login')" class="p-2 text-stone-700 hover:bg-stone-100 rounded-full">
+                    <i data-lucide="user" class="h-6 w-6"></i>
+                </button>
+            `;
+            showToast("Logged out successfully");
+            lucide.createIcons();
+        }
+
+        function completeOrder() {
+            showToast("Purchase Complete! Thank you.");
+            cart = [];
+            updateCartBadge();
+            navigateTo('home');
+        }
+
+        function handleContact(e) {
+            e.preventDefault();
+            showToast("Message sent! We'll get back to you.");
+            e.target.reset();
+        }
+
+        // --- INIT ---
+        window.onload = () => {
+            // Populate category filter dropdown
+            const filter = document.getElementById('category-filter');
+            CATEGORIES.forEach(cat => {
+                const opt = document.createElement('option');
+                opt.value = cat.id;
+                opt.innerText = cat.name;
+                filter.appendChild(opt);
+            });
+
+            // Listeners
+            document.getElementById('search-input').oninput = (e) => {
+                searchQuery = e.target.value;
+                renderProducts();
+            };
+            filter.onchange = (e) => {
+                activeCategory = e.target.value;
+                renderProducts();
+            };
+
+            renderPage('home');
+            lucide.createIcons();
+        };
+    </script>
+</body>
+</html>
